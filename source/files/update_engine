@@ -1,0 +1,5 @@
+#!/bin/sh
+
+echo "Google OTA Updates Disabled!"
+sleep 172800
+exit 0
