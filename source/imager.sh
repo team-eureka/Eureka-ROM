@@ -83,7 +83,7 @@ DATA="$(mount_mtd_partition userdata)"
 
 # Make folder for the keys, and copy them over
 pLog "Copying Unique SSH Keys to System"
-mkdir "${ROOTFS}/usr/share/sshkeys"
+mkdir -p "${ROOTFS}/usr/share/sshkeys"
 cp "${DATA}/flashcast/dropbear/"/* "${ROOTFS}/usr/share/sshkeys/"
 
 # Unmount userdata
