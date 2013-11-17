@@ -18,7 +18,7 @@ $(MOD_NAME): \
 	cd $(BUILD_DIR) ; zip -r $(abspath $@) .
 
 clean:
-	rm -rf $(BUILD_DIR) $(MOD_NAME)
+	rm -rf $(BUILD_DIR) $(MOD_NAME) source/imager.sh
 
 $(BUILD_DIR)/images: \
 	  download/ota/system.img \
