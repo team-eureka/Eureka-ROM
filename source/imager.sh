@@ -60,8 +60,8 @@ mv ./files/pwnedcast-update.sh "${ROOTFS}/chrome/"
 
 # Is a mod set to disable updates?
 if has_mod_option 'DisablePwnedCastOTA' ; then
-        pLog "Disabling PwnedCast OTA Updates per User Request"
-		touch "${ROOTFS}/chrome/disable_ota"
+	pLog "Disabling PwnedCast OTA Updates per User Request"
+	touch "${ROOTFS}/chrome/disable_ota"
 fi
 
 # Change Hard Coded DNS Servers
