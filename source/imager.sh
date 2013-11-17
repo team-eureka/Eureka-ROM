@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Vars
-# Do NOT change these, as they effect the update engine!
+# Do NOT change these, as they affect the update engine!
 Revision="7"
 VersionName="PwnedCast-13300-V1-R$Revision"
 
@@ -10,7 +10,7 @@ pLog() {
 	log "$VersionName: $1"
 }
 
-# We now debug every step of the process so its easier to debug problems
+# We now debug every step of the process so it's easier to debug problems
 pLog "Imager.sh now running"
 
 # Are we on the proper flashcast ver? Do a version check
@@ -22,7 +22,7 @@ fi
 pLog "Flashing Kernel..."
 flash_mtd_partition 'kernel' 'boot.img'
 
-# next we flash recovery
+# Next we flash recovery
 pLog "Flashing Recovery..."
 flash_mtd_partition 'recovery' 'eureka_recovery.img'
 
@@ -39,7 +39,7 @@ rm ./boot.img ./system.img
 pLog "Mounting System Partition"
 ROOTFS="$(begin_squashfs_edit 'rootfs')"
 
-# Replace boot animation
+# Set build revision
 pLog "Setting Build Revision"
 echo "$Revision" > "${ROOTFS}/chrome/pwnedcast_ver"
 
@@ -47,7 +47,7 @@ echo "$Revision" > "${ROOTFS}/chrome/pwnedcast_ver"
 pLog "Replacing Boot Animation"
 mv ./images/* "${ROOTFS}/res/images/"
 
-# Replace boot animation
+# Put in our own recovery
 pLog "Replacing Recovery File in System Image"
 rm "${ROOTFS}/boot/recovery.img"
 mv ./eureka_recovery.img "${ROOTFS}/boot/recovery.img"
@@ -90,7 +90,7 @@ mv ./files/clear_crash_counter "${ROOTFS}/bin"
 pLog "Mounting UserData Partition"
 DATA="$(mount_mtd_partition userdata)"
 
-# make folder for the keys, and copy them over
+# Make folder for the keys, and copy them over
 pLog "Copying Unique SSH Keys to System"
 mkdir "${ROOTFS}/usr/share/sshkeys"
 cp "${DATA}/flashcast/dropbear/"/* "${ROOTFS}/usr/share/sshkeys/"
