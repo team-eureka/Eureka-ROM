@@ -2,8 +2,8 @@
 
 # Vars
 # Do NOT change these, as they affect the update engine!
-Revision="7"
-VersionName="PwnedCast-13300-V1-R$Revision"
+Revision="@REVISION@"
+VersionName="PwnedCast-@BASE_BUILD@-V@VERSION@-R$Revision"
 
 # Prefixed log messages are easier to distinguish
 pLog() {
