@@ -1,5 +1,6 @@
 BASE_BUILD = 13300
 VERSION = 1
+REVISION = 7
 OTA_GIT_TAG = V1.0
 
 BUILD_DIR = build
@@ -61,3 +62,9 @@ download:
 
 prebuilt/recovery.img:
 	$(error Please place a prebuilt FlashCast recovery image at $@)
+
+IN_DEFINES = -e 's/@BASE_BUILD@/$(BASE_BUILD)/g' \
+	     -e 's/@VERSION@/$(VERSION)/g' \
+	     -e 's/@REVISION@/$(REVISION)/g'
+%.sh: %.sh.in
+	sed $(IN_DEFINES) $< > $@
