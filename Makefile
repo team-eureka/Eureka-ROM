@@ -18,7 +18,7 @@ $(MOD_NAME): \
 	cd $(BUILD_DIR) ; zip -r $(abspath $@) .
 
 clean:
-	rm -rf $(BUILD_DIR) $(MOD_NAME) source/imager.sh
+	rm -rf $(BUILD_DIR) $(MOD_NAME) source/imager.sh source/boot-animation
 
 $(BUILD_DIR)/images: \
 	  download/ota/system.img \
@@ -38,7 +38,7 @@ $(BUILD_DIR)/bin: \
 	$(INSTALL) -m 755 $? $@
 
 $(BUILD_DIR)/misc: \
-	  prebuilt/boot-animation \
+	  source/boot-animation \
 	  source/20-dns.conf
 	$(INSTALL) -d $@
 	cp -r --no-preserve=timestamps $? $@
@@ -59,6 +59,13 @@ download/PwnedCast-OTA: | download
 
 download:
 	mkdir -p $@
+
+source/boot-animation: source/boot-animation.mng
+	rm -rf $@
+	mkdir -p $@
+	convert $< -resize 438x117 $@/logo1080p_10fps%04d.png
+	convert $< -resize 292x78  $@/logo720p_10fps%04d.png
+	convert $< -resize 195x52  $@/logo480p_10fps%04d.png
 
 prebuilt/recovery.img:
 	$(error Please place a prebuilt FlashCast recovery image at $@)
