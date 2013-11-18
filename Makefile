@@ -16,6 +16,7 @@ $(MOD_NAME): \
 	  $(BUILD_DIR)/imager.sh
 	rm -f $@
 	cd $(BUILD_DIR) ; zip -r $(abspath $@) .
+	echo "$$(md5sum $@ | cut -f1 -d' ')  /cache/eureka_image.zip" >$@.md5
 
 clean:
 	rm -rf $(BUILD_DIR) $(MOD_NAME) source/imager.sh source/boot-animation
