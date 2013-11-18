@@ -74,4 +74,4 @@ IN_DEFINES = -e 's/@BASE_BUILD@/$(BASE_BUILD)/g' \
 	     -e 's/@VERSION@/$(VERSION)/g' \
 	     -e 's/@REVISION@/$(REVISION)/g'
 %.sh: %.sh.in
-	sed $(IN_DEFINES) $< > $@
+	sed $(IN_DEFINES) $< >$@
