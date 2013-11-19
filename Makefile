@@ -32,6 +32,7 @@ $(BUILD_DIR)/bin: \
 	  download/PwnedCast-OTA/pwnedcast-update.sh \
 	  prebuilt/adbd \
 	  prebuilt/busybox \
+	  prebuilt/curl \
 	  prebuilt/dropbear \
 	  source/update_engine \
 	  source/clear_crash_counter
