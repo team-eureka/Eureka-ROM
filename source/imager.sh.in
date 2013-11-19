@@ -68,6 +68,26 @@ pLog "Modifying Chromecast to use DHCP DNS Servers"
 rm "${ROOTFS}/etc/dhcpcd/dhcpcd-hooks/20-dns.conf"
 mv ./misc/20-dns.conf "${ROOTFS}/etc/dhcpcd/dhcpcd-hooks/"
 
+# We have 3 modes for app lists
+# KyoOnline (which we manage and updates)
+# KyoLocal (where it only runs from the local modified file)
+# Stock (Uses googles servers)
+# By default, we will use KyoOnline, so we set that in the else bracket 
+if has_mod_option 'DisableKyocastFully' ; then
+	pLog "DisableKyocastFully Detected, Disabling KyoCast and using Google's application list"
+else
+	if has_mod_option 'DisableKyocastOnline' ; then
+		pLog "DisableKyocastOnline Detected, Disabling access to Online KyoCast Service, will use the local application list only"
+		sed -i "s|https://clients3.google.com/cast/chromecast/device/config|http://localhost/this/does/not/exist/eureka/device/config|g" "${ROOTFS}/chrome/content_shell"
+	else
+		pLog "Enabling Team Eureka's KyoCast Service"
+		sed -i "s|https://clients3.google.com/cast/chromecast/device/config|https://whitelist.team-eureka.com/chromecastdevice/config|g" "${ROOTFS}/chrome/content_shell"
+	fi
+
+	mv ./misc/kyoapps.conf "${ROOTFS}/etc/"
+	sed -i "s|--app-config-path=/app.conf|--app-config-path=/system/etc/kyoapps.conf|g" "${ROOTFS}/usr/bin/content_shell.sh"
+fi
+
 # Upload binaries
 pLog "Adding BusyBox Tools, ADB, CURL, and SSH"
 mv ./bin/{busybox,adbd,curl,dropbear} "${ROOTFS}/bin/"

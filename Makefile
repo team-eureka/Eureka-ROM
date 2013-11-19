@@ -41,6 +41,7 @@ $(BUILD_DIR)/bin: \
 
 $(BUILD_DIR)/misc: \
 	  source/boot-animation \
+	  source/kyoapps.conf \
 	  source/20-dns.conf
 	$(INSTALL) -d $@
 	cp -r --no-preserve=timestamps $? $@
