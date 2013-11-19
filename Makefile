@@ -56,7 +56,7 @@ download/ota.zip: | download
 download/PwnedCast-OTA/pwnedcast-update.sh: download/PwnedCast-OTA
 
 download/PwnedCast-OTA: | download
-	git clone -b $(OTA_GIT_TAG) https://github.com/riptidewave93/PwnedCast-OTA.git $@
+	git clone -b $(OTA_GIT_TAG) https://github.com/team-eureka/PwnedCast-OTA.git $@
 
 download:
 	mkdir -p $@
