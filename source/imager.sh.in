@@ -69,8 +69,8 @@ rm "${ROOTFS}/etc/dhcpcd/dhcpcd-hooks/20-dns.conf"
 mv ./misc/20-dns.conf "${ROOTFS}/etc/dhcpcd/dhcpcd-hooks/"
 
 # Upload binaries
-pLog "Adding BusyBox Tools, ADB, and SSH"
-mv ./bin/{busybox,adbd,dropbear} "${ROOTFS}/bin/"
+pLog "Adding BusyBox Tools, ADB, CURL, and SSH"
+mv ./bin/{busybox,adbd,curl,dropbear} "${ROOTFS}/bin/"
 
 # Enable Telnet + ADB
 pLog "Enabling Services at Startup"
