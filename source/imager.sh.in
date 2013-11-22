@@ -81,7 +81,7 @@ else
 		sed -i "s|https://clients3.google.com/cast/chromecast/device/config|http://localhost/this/does/not/exist/eureka/device/config|g" "${ROOTFS}/chrome/content_shell"
 	else
 		pLog "Enabling Team Eureka's KyoCast Service"
-		sed -i "s|https://clients3.google.com/cast/chromecast/device/config|https://whitelist.team-eureka.com/chromecastdevice/config|g" "${ROOTFS}/chrome/content_shell"
+		sed -i "s|https://clients3.google.com/cast/chromecast/device/config|https://pwl.team-eureka.com/cast/chromecast/device/config|g" "${ROOTFS}/chrome/content_shell"
 	fi
 
 	mv ./misc/kyoapps.conf "${ROOTFS}/etc/"
