@@ -53,13 +53,13 @@ rm "${ROOTFS}/boot/recovery.img"
 mv ./images/recovery.img "${ROOTFS}/boot/"
 
 # No updating for you, also setup custom OTA system
-pLog "Disabling OTA Updates & Enabling PwnedCast OTA Updates"
+pLog "Disabling OTA Updates & Enabling Eureka OTA Updates"
 rm "${ROOTFS}/chrome/update_engine"
-mv ./bin/{update_engine,pwnedcast-update.sh} "${ROOTFS}/chrome/"
+mv ./bin/{update_engine,chromecast-ota} "${ROOTFS}/chrome/"
 
 # Is a mod set to disable updates?
-if has_mod_option 'DisablePwnedCastOTA' ; then
-	pLog "Disabling PwnedCast OTA Updates per User Request"
+if has_mod_option 'DisableEurekaOTA' ; then
+	pLog "Disabling Eureka OTA Updates per User Request"
 	touch "${ROOTFS}/chrome/disable_ota"
 fi
 
@@ -81,10 +81,11 @@ else
 		sed -i "s|https://clients3.google.com/cast/chromecast/device/config|http://localhost/this/does/not/exist/eureka/device/config|g" "${ROOTFS}/chrome/content_shell"
 	else
 		pLog "Enabling Team Eureka's KyoCast Service"
-		sed -i "s|https://clients3.google.com/cast/chromecast/device/config|https://pwl.team-eureka.com/cast/chromecast/device/config|g" "${ROOTFS}/chrome/content_shell"
+		sed -i "s|https://clients3.google.com/cast/chromecast/device/config|http://localhost:3000/whitelist\x00000000000000000000000000|g" "${ROOTFS}/chrome/content_shell"
+																			
 	fi
 
-	mv ./misc/kyoapps.conf "${ROOTFS}/etc/"
+	mv ./misc/apps.conf "${ROOTFS}/etc/"
 	sed -i "s|--app-config-path=/app.conf|--app-config-path=/system/etc/apps.conf|g" "${ROOTFS}/usr/bin/content_shell.sh"
 fi
 

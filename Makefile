@@ -1,7 +1,7 @@
 BASE_BUILD = 13300
 VERSION = 1
 REVISION = 9
-OTA_GIT_TAG = V1.1.1
+OTA_GIT_TAG = V1.2
 
 BUILD_DIR = build
 MOD_NAME = 20PwnedCast-$(BASE_BUILD)-V$(VERSION).zip
@@ -29,7 +29,7 @@ $(BUILD_DIR)/images: \
 	$(INSTALL) -m 644 $? $@
 
 $(BUILD_DIR)/bin: \
-	  download/PwnedCast-OTA/pwnedcast-update.sh \
+	  download/ChromeCast-OTA/chromecast-ota \
 	  prebuilt/adbd \
 	  prebuilt/busybox \
 	  prebuilt/curl \
@@ -55,10 +55,10 @@ download/ota/%: download/ota.zip | download
 download/ota.zip: | download
 	curl -Lo $@ http://cache.pack.google.com/edgedl/googletv-eureka/stable-channel/ota.13300.stable-channel.eureka-b3.1f63ef63d1f43c6222116806e5bea38a47e9f124.zip
 
-download/PwnedCast-OTA/pwnedcast-update.sh: download/PwnedCast-OTA
+download/ChromeCast-OTA/chromecast-ota: download/ChromeCast-OTA
 
-download/PwnedCast-OTA: | download
-	git clone -b $(OTA_GIT_TAG) https://github.com/team-eureka/PwnedCast-OTA.git $@
+download/ChromeCast-OTA: | download
+	git clone -b $(OTA_GIT_TAG) https://github.com/team-eureka/ChromeCast-OTA.git $@
 
 download:
 	mkdir -p $@

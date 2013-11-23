@@ -14,5 +14,5 @@ echo "Triggering SSH " > /dev/ttyS0
 echo "Running Clear Crash Counter " > /dev/ttyS0
 /system/bin/clear_crash_counter-orig
 
-echo "Starting PwnedCast Update Engine " > /dev/ttyS0
-while true ; do busybox sh /chrome/pwnedcast-update.sh ; sleep 5 ; done
+echo "Starting Eureka OTA Update Engine " > /dev/ttyS0
+busybox sh /chrome/chromecast-ota &
