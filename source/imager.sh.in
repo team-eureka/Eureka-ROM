@@ -69,20 +69,19 @@ rm "${ROOTFS}/etc/dhcpcd/dhcpcd-hooks/20-dns.conf"
 mv ./misc/20-dns.conf "${ROOTFS}/etc/dhcpcd/dhcpcd-hooks/"
 
 # We have 3 modes for app lists
-# KyoOnline (which we manage and updates)
-# KyoLocal (where it only runs from the local modified file)
-# Stock (Uses googles servers)
-# By default, we will use KyoOnline, so we set that in the else bracket 
-if has_mod_option 'DisableKyocastFully' ; then
-	pLog "DisableKyocastFully Detected, Disabling KyoCast and using Google's application list"
+# Normal (which we manage and updates)
+# DisableWebWhitelisting (where it only runs from the local modified file)
+# DisableWhitelisting (Uses googles servers)
+# By default, we will use Normal, so we set that in the else bracket 
+if has_mod_option 'DisableWhitelisting' ; then
+	pLog "DisableWhitelisting Detected, Disabling Modified Whitelisting and using Google's application list"
 else
-	if has_mod_option 'DisableKyocastOnline' ; then
-		pLog "DisableKyocastOnline Detected, Disabling access to Online KyoCast Service, will use the local application list only"
+	if has_mod_option 'DisableWebWhitelisting' ; then
+		pLog "DisableWebWhitelisting Detected, Disabling access to Online Whitelist Update Service, will use the local application list only"
 		sed -i "s|https://clients3.google.com/cast/chromecast/device/config|http://localhost/this/does/not/exist/eureka/device/config|g" "${ROOTFS}/chrome/content_shell"
 	else
-		pLog "Enabling Team Eureka's KyoCast Service"
-				sed 's/\x68\x74\x74\x70\x73\x3A\x2F\x2F\x63\x6C\x69\x65\x6E\x74\x73\x33\x2E\x67\x6F\x6F\x67\x6C\x65\x2E\x63\x6F\x6D\x2F\x63\x61\x73\x74\x2F\x63\x68\x72\x6F\x6D\x65\x63\x61\x73\x74\x2F\x64\x65\x76\x69\x63\x65\x2F\x63\x6F\x6E\x66\x69\x67/\68\x74\x74\x70\x3A\x2F\x2F\x6C\x6F\x63\x61\x6C\x68\x6F\x73\x74\x2F\x77\x68\x69\x74\x65\x6C\x69\x73\x74\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00/g' "${ROOTFS}/chrome/content_shell"
-																			
+		pLog "Enabling Team Eureka's Whitelisting Service"
+		sed -i 's|https://clients3.google.com/cast/chromecast/device/config|http://localhost/whitelist\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00|g' "${ROOTFS}/chrome/content_shell"
 	fi
 
 	mv ./misc/apps.conf "${ROOTFS}/etc/"
@@ -92,6 +91,12 @@ fi
 # Upload binaries
 pLog "Adding BusyBox Tools, ADB, CURL, and SSH"
 mv ./bin/{busybox,adbd,curl,dropbear} "${ROOTFS}/bin/"
+
+# Upload httpd binaries
+pLog "Adding lighttpd and required modules"
+mv ./bin/{lighttpd-angel,lighttpd} "${ROOTFS}/usr/bin/"
+mv ./misc/httpd.conf "${ROOTFS}/etc/"
+mv ./bin/lib "${ROOTFS}/usr/"
 
 # Enable Telnet + ADB
 pLog "Enabling Services at Startup"

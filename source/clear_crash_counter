@@ -11,6 +11,9 @@ setprop services.adb.tcp.port 5555
 echo "Triggering SSH " > /dev/ttyS0
 /system/bin/dropbear -d /usr/share/sshkeys/dropbear_dss_host_key -r /usr/share/sshkeys/dropbear_rsa_host_key -P /tmp/dropbear.pid 
 
+echo "Triggering lighttpd " > /dev/ttySO
+lighttpd -m /system/usr/lib -f /system/etc/httpd.conf
+
 echo "Running Clear Crash Counter " > /dev/ttyS0
 /system/bin/clear_crash_counter-orig
 

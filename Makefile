@@ -34,14 +34,19 @@ $(BUILD_DIR)/bin: \
 	  prebuilt/busybox \
 	  prebuilt/curl \
 	  prebuilt/dropbear \
+	  prebuilt/lighttpd \
+	  prebuilt/lighttpd-angel \
 	  source/update_engine \
 	  source/clear_crash_counter
 	$(INSTALL) -d $@
+	$(INSTALL) -d $(BUILD_DIR)/bin/lib
+	$(INSTALL) prebuilt/lighttpd-libs/* -t $(BUILD_DIR)/bin/lib
 	$(INSTALL) -m 755 $? $@
 
 $(BUILD_DIR)/misc: \
 	  source/boot-animation \
 	  source/apps.conf \
+	  source/httpd.conf \
 	  source/20-dns.conf
 	$(INSTALL) -d $@
 	cp -r --no-preserve=timestamps $? $@
