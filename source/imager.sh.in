@@ -85,7 +85,7 @@ else
 	fi
 
 	mv ./misc/kyoapps.conf "${ROOTFS}/etc/"
-	sed -i "s|--app-config-path=/app.conf|--app-config-path=/system/etc/kyoapps.conf|g" "${ROOTFS}/usr/bin/content_shell.sh"
+	sed -i "s|--app-config-path=/app.conf|--app-config-path=/system/etc/apps.conf|g" "${ROOTFS}/usr/bin/content_shell.sh"
 fi
 
 # Upload binaries
