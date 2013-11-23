@@ -4,7 +4,7 @@ REVISION = 9
 OTA_GIT_TAG = V1.2
 
 BUILD_DIR = build
-MOD_NAME = 20PwnedCast-$(BASE_BUILD)-V$(VERSION).zip
+MOD_NAME = 20EurekaROM-$(BASE_BUILD)-V$(VERSION).zip
 INSTALL = install
 
 .PHONY: clean
