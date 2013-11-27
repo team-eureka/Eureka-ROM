@@ -30,12 +30,14 @@ $(BUILD_DIR)/images: \
 
 $(BUILD_DIR)/bin: \
 	  download/ChromeCast-OTA/chromecast-ota \
+	  download/EurekaSettings \
 	  prebuilt/adbd \
 	  prebuilt/busybox \
 	  prebuilt/curl \
 	  prebuilt/dropbear \
 	  prebuilt/lighttpd \
 	  prebuilt/lighttpd-angel \
+	  prebuilt/Whitelist-CGI \
 	  source/update_engine \
 	  source/clear_crash_counter
 	$(INSTALL) -d $@
@@ -65,6 +67,9 @@ download/ChromeCast-OTA/chromecast-ota: download/ChromeCast-OTA
 download/ChromeCast-OTA: | download
 	git clone -b $(OTA_GIT_TAG) https://github.com/team-eureka/ChromeCast-OTA.git $@
 
+download/EurekaSettings:
+	curl -Lo $@	https://github.com/team-eureka/EurekaSettings/releases/download/1.0/EurekaSettings
+	
 download:
 	mkdir -p $@
 

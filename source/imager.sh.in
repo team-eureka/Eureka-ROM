@@ -96,10 +96,20 @@ pLog "Adding BusyBox Tools, ADB, CURL, and SSH"
 mv ./bin/{busybox,adbd,curl,dropbear} "${ROOTFS}/bin/"
 
 # Upload httpd binaries
-pLog "Adding lighttpd and required modules"
+pLog "Adding lighttpd, required modules, and creating root www folder"
 mv ./bin/{lighttpd-angel,lighttpd} "${ROOTFS}/usr/bin/"
 mv ./misc/httpd.conf "${ROOTFS}/etc/"
 mv ./bin/lib "${ROOTFS}/usr/"
+mkdir "${ROOTFS}/usr/share/www/"
+
+# Upload EurekaSettings
+pLog "Adding EurekaSettings"
+mv ./bin/EurekaSettings "${ROOTFS}/usr/bin/"
+
+# Upload Whitelist-CGI
+pLog "Adding Whitelist CGI Application"
+mkdir -p "${ROOTFS}/usr/share/cgi-apps/whitelist-cgi/"
+mv ./bin/Whitelist-CGI "${ROOTFS}/usr/share/cgi-apps/whitelist-cgi/index.cgi"
 
 # Enable Telnet + ADB
 pLog "Enabling Services at Startup"
