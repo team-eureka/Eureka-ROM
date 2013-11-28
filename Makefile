@@ -30,7 +30,7 @@ $(BUILD_DIR)/images: \
 
 $(BUILD_DIR)/bin: \
 	  download/ChromeCast-OTA/chromecast-ota \
-	  download/EurekaSettings \
+	  prebuilt/EurekaSettings \
 	  prebuilt/adbd \
 	  prebuilt/busybox \
 	  prebuilt/curl \
@@ -67,9 +67,6 @@ download/ChromeCast-OTA/chromecast-ota: download/ChromeCast-OTA
 download/ChromeCast-OTA: | download
 	git clone -b $(OTA_GIT_TAG) https://github.com/team-eureka/ChromeCast-OTA.git $@
 
-download/EurekaSettings:
-	curl -Lo $@	https://github.com/team-eureka/EurekaSettings/releases/download/1.0/EurekaSettings
-	
 download:
 	mkdir -p $@
 
@@ -83,6 +80,12 @@ source/boot-animation: source/boot-animation.mng
 prebuilt/recovery.img:
 	$(error Please place a prebuilt FlashCast recovery image at $@)
 
+prebuilt/EurekaSettings:
+	$(error Please place a compiled version of EurekaSettings at $@)
+	
+prebuilt/Whitelist-CGI:
+	$(error Please place a compiled version of Whitelist-CGI at $@)	
+	
 IN_DEFINES = -e 's/@BASE_BUILD@/$(BASE_BUILD)/g' \
 	     -e 's/@VERSION@/$(VERSION)/g' \
 	     -e 's/@REVISION@/$(REVISION)/g'
