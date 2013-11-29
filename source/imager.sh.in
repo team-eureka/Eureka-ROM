@@ -57,7 +57,9 @@ mv ./images/recovery.img "${ROOTFS}/boot/"
 # No updating for you, also setup custom OTA system
 pLog "Disabling OTA Updates & Enabling Eureka OTA Updates"
 rm "${ROOTFS}/chrome/update_engine"
-mv ./bin/{update_engine,chromecast-ota} "${ROOTFS}/chrome/"
+mv ./bin/update_engine "${ROOTFS}/chrome/"
+mkdir -p "${ROOTFS}/usr/share/eureka-apps/ota/"
+mv ./bin/chromecast-ota "${ROOTFS}/usr/share/eureka-apps/ota/"
 
 # Is a mod set to disable updates?
 if has_mod_option 'DisableEurekaOTA' ; then
@@ -66,7 +68,7 @@ if has_mod_option 'DisableEurekaOTA' ; then
 fi
 
 # Change Hard Coded DNS Servers
-pLog "Modifying Chromecast to use DHCP DNS Servers"
+pLog "Enabling use DHCP DNS Servers"
 rm "${ROOTFS}/etc/dhcpcd/dhcpcd-hooks/20-dns.conf"
 mv ./misc/20-dns.conf "${ROOTFS}/etc/dhcpcd/dhcpcd-hooks/"
 
@@ -86,9 +88,10 @@ else
 		pLog "Enabling Team Eureka's Whitelisting Service"
 		sed -i 's|https://clients3.google.com/cast/chromecast/device/config|http://localhost/whitelist\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00|g' "${ROOTFS}/chrome/content_shell"
 	fi
-
-	mv ./misc/apps.conf "${ROOTFS}/etc/"
-	sed -i "s|--app-config-path=/app.conf|--app-config-path=/system/etc/apps.conf|g" "${ROOTFS}/usr/bin/content_shell.sh"
+	
+	mkdir -p "${ROOTFS}/usr/share/eureka-apps/configs/"
+	mv ./misc/apps.conf "${ROOTFS}/usr/share/eureka-apps/configs/"
+	sed -i "s|--app-config-path=/app.conf|--app-config-path=/system/usr/share/eureka-apps/configs/apps.conf|g" "${ROOTFS}/usr/bin/content_shell.sh"
 fi
 
 # Upload binaries
@@ -105,11 +108,15 @@ mkdir "${ROOTFS}/usr/share/www/"
 # Upload EurekaSettings
 pLog "Adding EurekaSettings"
 mv ./bin/EurekaSettings "${ROOTFS}/usr/bin/"
+mv ./misc/eureka.ini "${ROOTFS}/usr/share/eureka-apps/configs/"
+chmod 777 "${ROOTFS}/usr/share/eureka-apps/configs/eureka.ini"
 
 # Upload Whitelist-CGI
-pLog "Adding Whitelist CGI Application"
+pLog "Adding Whitelist-CGI & Whitelist-sync Application "
 mkdir -p "${ROOTFS}/usr/share/cgi-apps/whitelist-cgi/"
 mv ./bin/Whitelist-CGI "${ROOTFS}/usr/share/cgi-apps/whitelist-cgi/index.cgi"
+mkdir -p "${ROOTFS}/usr/share/eureka-apps/whitelist-sync/"
+mv ./bin/whitelist-sync "${ROOTFS}/usr/share/eureka-apps/whitelist-sync/"
 
 # Enable Telnet + ADB
 pLog "Enabling Services at Startup"

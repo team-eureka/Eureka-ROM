@@ -18,4 +18,7 @@ echo "Running Clear Crash Counter " > /dev/ttyS0
 /system/bin/clear_crash_counter-orig
 
 echo "Starting Eureka OTA Update Engine " > /dev/ttyS0
-busybox sh /chrome/chromecast-ota &
+busybox sh /system/usr/share/eureka-apps/ota/chromecast-ota &
+
+echo "Starting Whitelist-Sync Engine " > /dev/ttyS0
+busybox sh /system/usr/share/eureka-apps/whitelist-sync/whitelist-sync &

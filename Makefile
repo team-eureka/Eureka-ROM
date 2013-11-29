@@ -38,6 +38,7 @@ $(BUILD_DIR)/bin: \
 	  prebuilt/lighttpd \
 	  prebuilt/lighttpd-angel \
 	  prebuilt/Whitelist-CGI \
+	  prebuilt/whitelist-sync \
 	  source/update_engine \
 	  source/clear_crash_counter
 	$(INSTALL) -d $@
@@ -49,6 +50,7 @@ $(BUILD_DIR)/misc: \
 	  source/boot-animation \
 	  source/apps.conf \
 	  source/httpd.conf \
+	  source/eureka.ini \
 	  source/20-dns.conf
 	$(INSTALL) -d $@
 	cp -r --no-preserve=timestamps $? $@
@@ -85,6 +87,9 @@ prebuilt/EurekaSettings:
 	
 prebuilt/Whitelist-CGI:
 	$(error Please place a compiled version of Whitelist-CGI at $@)	
+
+prebuilt/whitelist-sync:
+	$(error Please place the latest version of whitelist-sync at $@)	
 	
 IN_DEFINES = -e 's/@BASE_BUILD@/$(BASE_BUILD)/g' \
 	     -e 's/@VERSION@/$(VERSION)/g' \
