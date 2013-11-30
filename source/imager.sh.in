@@ -15,9 +15,9 @@ pLog "Imager.sh now running"
 
 # Are we on the proper flashcast ver? Do a version check
 if ! test -f "/etc/flasher-version" ; then
-	fatal "$VersionName: Installation Cancelled, Please Update to Flashcast Version 1.2 or Later."
-elif test is_at_least_version "1.2" -ne 0 ; then
-	fatal "$VersionName: Installation Cancelled, Please Update to Flashcast Version 1.2 or Later."
+	fatal "$VersionName: Installation Cancelled, Please Update to Flashcast Version 1.1.1 or Later."
+elif is_at_least_version "1.1.1" ; then
+	fatal "$VersionName: Installation Cancelled, Please Update to Flashcast Version 1.1.1 or Later."
 fi
 
 # First we flash the kernel
