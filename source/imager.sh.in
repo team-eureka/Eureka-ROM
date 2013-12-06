@@ -72,27 +72,12 @@ pLog "Enabling use DHCP DNS Servers"
 rm "${ROOTFS}/etc/dhcpcd/dhcpcd-hooks/20-dns.conf"
 mv ./misc/20-dns.conf "${ROOTFS}/etc/dhcpcd/dhcpcd-hooks/"
 
-# We have 3 modes for app lists
-# Normal (which we manage and updates)
-# DisableWebWhitelisting (where it only runs from the local modified file)
-# DisableWhitelisting (Uses googles servers)
-# By default, we will use Normal, so we set that in the else bracket 
-#
-if has_mod_option 'DisableWhitelisting' ; then
-	pLog "DisableWhitelisting Detected, Disabling Modified Whitelisting and using Google's application list"
-else
-	if has_mod_option 'DisableWebWhitelisting' ; then
-		pLog "DisableWebWhitelisting Detected, Disabling access to Online Whitelist Update Service, will use the local application list only"
-		sed -i "s|https://clients3.google.com/cast/chromecast/device/config|http://localhost/this/does/not/exist/eureka/device/config|g" "${ROOTFS}/chrome/content_shell"
-	else
-		pLog "Enabling Team Eureka's Whitelisting Service"
-		sed -i 's|https://clients3.google.com/cast/chromecast/device/config|http://localhost/whitelist\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00|g' "${ROOTFS}/chrome/content_shell"
-	fi
-	
-	mkdir -p "${ROOTFS}/usr/share/eureka-apps/configs/"
-	mv ./misc/apps.conf "${ROOTFS}/usr/share/eureka-apps/configs/"
-	sed -i "s|--app-config-path=/app.conf|--app-config-path=/system/usr/share/eureka-apps/configs/apps.conf|g" "${ROOTFS}/usr/bin/content_shell.sh"
-fi
+# Enable use of local CGI whitelist program
+pLog "Enabling Team Eureka's Whitelisting Service"
+sed -i 's|https://clients3.google.com/cast/chromecast/device/baseconfig|http://localhost/whitelist\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00|g' "${ROOTFS}/chrome/eureka_shell"
+mkdir -p "${ROOTFS}/usr/share/eureka-apps/configs/"
+mv ./misc/apps.conf "${ROOTFS}/usr/share/eureka-apps/configs/"
+sed -i "s|--app-config-path=/app.conf|--app-config-path=/system/usr/share/eureka-apps/configs/apps.conf|g" "${ROOTFS}/usr/bin/content_shell.sh"
 
 # Upload binaries
 pLog "Adding BusyBox Tools, ADB, CURL, and SSH"
@@ -120,8 +105,8 @@ mv ./bin/whitelist-sync "${ROOTFS}/usr/share/eureka-apps/whitelist-sync/"
 
 # Enable Telnet + ADB
 pLog "Enabling Services at Startup"
-mv "${ROOTFS}/bin/clear_crash_counter" "${ROOTFS}/bin/clear_crash_counter-orig"
-mv ./bin/clear_crash_counter "${ROOTFS}/bin/"
+rm "${ROOTFS}/bin/sntpd"
+mv ./bin/sntpd "${ROOTFS}/bin/sntpd"
 
 # Mounting /data
 pLog "Mounting UserData Partition"

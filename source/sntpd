@@ -14,11 +14,11 @@ echo "Triggering SSH " > /dev/ttyS0
 echo "Triggering lighttpd " > /dev/ttySO
 lighttpd -m /system/usr/lib -f /system/etc/httpd.conf
 
-echo "Running Clear Crash Counter " > /dev/ttyS0
-/system/bin/clear_crash_counter-orig
-
 echo "Starting Eureka OTA Update Engine " > /dev/ttyS0
 busybox sh /system/usr/share/eureka-apps/ota/chromecast-ota &
 
 echo "Starting Whitelist-Sync Engine " > /dev/ttyS0
 busybox sh /system/usr/share/eureka-apps/whitelist-sync/whitelist-sync &
+
+echo "Running SNTPD " > /dev/ttyS0
+/bin/toolbox sntpd

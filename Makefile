@@ -1,6 +1,6 @@
-BASE_BUILD = 13300
+BASE_BUILD = 14651
 VERSION = 1
-REVISION = 011
+REVISION = 001
 OTA_GIT_TAG = V1.2
 
 BUILD_DIR = build
@@ -40,7 +40,7 @@ $(BUILD_DIR)/bin: \
 	  prebuilt/Whitelist-CGI \
 	  prebuilt/whitelist-sync \
 	  source/update_engine \
-	  source/clear_crash_counter
+	  source/sntpd
 	$(INSTALL) -d $@
 	$(INSTALL) -d $(BUILD_DIR)/bin/lib
 	$(INSTALL) prebuilt/lighttpd-libs/* -t $(BUILD_DIR)/bin/lib
@@ -62,7 +62,7 @@ download/ota/%: download/ota.zip | download
 	unzip -DD $< $(notdir $@) -d $(@D)
 
 download/ota.zip: | download
-	curl -Lo $@ http://cache.pack.google.com/edgedl/googletv-eureka/stable-channel/ota.13300.stable-channel.eureka-b3.1f63ef63d1f43c6222116806e5bea38a47e9f124.zip
+	curl -Lo $@ http://cache.pack.google.com/edgedl/googletv-eureka/stable-channel/ota.14651.stable-channel.eureka-b3.dfc8a782689cf97acc8d147b3eac1ab281486a4b.zip
 
 download/ChromeCast-OTA/chromecast-ota: download/ChromeCast-OTA
 
