@@ -35,10 +35,11 @@ $(BUILD_DIR)/bin: \
 	  prebuilt/busybox \
 	  prebuilt/curl \
 	  prebuilt/dropbear \
+	  prebuilt/fts-get \
+	  prebuilt/fts-set \
 	  prebuilt/lighttpd \
 	  prebuilt/lighttpd-angel \
 	  prebuilt/Whitelist-CGI \
-	  prebuilt/whitelist-sync \
 	  source/update_engine \
 	  source/sntpd
 	$(INSTALL) -d $@
@@ -87,9 +88,6 @@ prebuilt/EurekaSettings:
 	
 prebuilt/Whitelist-CGI:
 	$(error Please place a compiled version of Whitelist-CGI at $@)	
-
-prebuilt/whitelist-sync:
-	$(error Please place the latest version of whitelist-sync at $@)	
 	
 IN_DEFINES = -e 's/@BASE_BUILD@/$(BASE_BUILD)/g' \
 	     -e 's/@VERSION@/$(VERSION)/g' \

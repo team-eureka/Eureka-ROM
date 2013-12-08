@@ -80,8 +80,8 @@ mv ./misc/apps.conf "${ROOTFS}/usr/share/eureka-apps/configs/"
 sed -i "s|--app-config-path=/app.conf|--app-config-path=/system/usr/share/eureka-apps/configs/apps.conf|g" "${ROOTFS}/usr/bin/content_shell.sh"
 
 # Upload binaries
-pLog "Adding BusyBox Tools, ADB, CURL, and SSH"
-mv ./bin/{busybox,adbd,curl,dropbear} "${ROOTFS}/bin/"
+pLog "Adding BusyBox Tools, ADB, CURL, FTS-Utils and SSH Binaries"
+mv ./bin/{busybox,adbd,curl,dropbear,fts-get,fts-set} "${ROOTFS}/bin/"
 
 # Upload httpd binaries
 pLog "Adding lighttpd, required modules, and creating root www folder"
@@ -97,11 +97,9 @@ mv ./misc/eureka.ini "${ROOTFS}/usr/share/eureka-apps/configs/"
 chmod 777 "${ROOTFS}/usr/share/eureka-apps/configs/eureka.ini"
 
 # Upload Whitelist-CGI
-pLog "Adding Whitelist-CGI & Whitelist-sync Application "
+pLog "Adding Whitelist-CGI Application "
 mkdir -p "${ROOTFS}/usr/share/cgi-apps/whitelist-cgi/"
 mv ./bin/Whitelist-CGI "${ROOTFS}/usr/share/cgi-apps/whitelist-cgi/index.cgi"
-mkdir -p "${ROOTFS}/usr/share/eureka-apps/whitelist-sync/"
-mv ./bin/whitelist-sync "${ROOTFS}/usr/share/eureka-apps/whitelist-sync/"
 
 # Enable Telnet + ADB
 pLog "Enabling Services at Startup"

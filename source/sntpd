@@ -17,8 +17,8 @@ lighttpd -m /system/usr/lib -f /system/etc/httpd.conf
 echo "Starting Eureka OTA Update Engine " > /dev/ttyS0
 busybox sh /system/usr/share/eureka-apps/ota/chromecast-ota > /tmp/chromecast-ota.log &
 
-echo "Starting Whitelist-Sync Engine " > /dev/ttyS0
-busybox sh /system/usr/share/eureka-apps/whitelist-sync/whitelist-sync > /tmp/whitelist-sync.log &
+echo "Clearing FTS Crash Counter " > /dev/ttyS0
+sleep 45 && fts-set crashcounter.android 0 &
 
 echo "Running SNTPD " > /dev/ttyS0
 /bin/toolbox sntpd
