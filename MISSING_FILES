@@ -1,6 +1,6 @@
 The following files were removed due to multiple reasons.
 
-./prebuilt/recovery.img - PwnedCast Recovery Image which is based on FlashCast 1.1. Sources for FlashCast 1.1 can be found at https://github.com/team-eureka/eureka_buildroot
+./prebuilt/recovery.img - PwnedCast Recovery Image which is based on FlashCast 1.1.1. Sources for FlashCast 1.1.1 can be found at https://github.com/team-eureka/eureka_buildroot
 
 ./prebuilt/EurekaSettings - EureakaSettings binary which must be cross compiled using the google prebuilt toolchain for the chromecast. Sources for EurekaSettings can be found at https://github.com/team-eureka/EurekaSettings
 
