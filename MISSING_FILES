@@ -5,3 +5,5 @@ The following files were removed due to multiple reasons.
 ./prebuilt/EurekaSettings - EureakaSettings binary which must be cross compiled using the google prebuilt toolchain for the chromecast. Sources for EurekaSettings can be found at https://github.com/team-eureka/EurekaSettings
 
 ./prebuilt/Whitelist-CGI - Whitelist-CGI web application which must be cross compiled using the google prebuilt toolchain for the chromecast. Sources for Whitelist-CGI can be found at https://github.com/team-eureka/Whitelist-CGI
+
+./prebuilt/whitelist-sync - whitelist-sync script which must be downloaded and added to the source. Sources for whitelist-sync can be found at https://github.com/team-eureka/Whitelist-CGI

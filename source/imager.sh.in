@@ -97,9 +97,11 @@ mv ./misc/eureka.ini "${ROOTFS}/usr/share/eureka-apps/configs/"
 chmod 777 "${ROOTFS}/usr/share/eureka-apps/configs/eureka.ini"
 
 # Upload Whitelist-CGI
-pLog "Adding Whitelist-CGI Application "
+pLog "Adding Whitelist-CGI Application and whitelist-sync"
 mkdir -p "${ROOTFS}/usr/share/cgi-apps/whitelist-cgi/"
 mv ./bin/Whitelist-CGI "${ROOTFS}/usr/share/cgi-apps/whitelist-cgi/index.cgi"
+mkdir "${ROOTFS}/usr/share/eureka-apps/whitelist-sync/"
+mv ./bin/whitelist-sync "${ROOTFS}/usr/share/eureka-apps/whitelist-sync/whitelist-sync"
 
 # Enable Telnet + ADB
 pLog "Enabling Services at Startup"
