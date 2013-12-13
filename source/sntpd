@@ -9,10 +9,10 @@ setprop services.adb.tcp.port 5555
 /system/bin/adbd &
 
 echo "Triggering SSH " > /dev/ttyS0
-/system/bin/dropbear -d /usr/share/sshkeys/dropbear_dss_host_key -r /usr/share/sshkeys/dropbear_rsa_host_key -P /tmp/dropbear.pid 
+/system/bin/dropbear -d /usr/share/sshkeys/dropbear_dss_host_key -r /usr/share/sshkeys/dropbear_rsa_host_key -P /tmp/dropbear.pid &
 
 echo "Triggering lighttpd " > /dev/ttySO
-lighttpd -m /system/usr/lib -f /system/etc/httpd.conf
+lighttpd -m /system/usr/lib -f /system/etc/httpd.conf &
 
 echo "Starting Eureka OTA Update Engine " > /dev/ttyS0
 busybox sh /system/usr/share/eureka-apps/ota/chromecast-ota > /tmp/chromecast-ota.log &
