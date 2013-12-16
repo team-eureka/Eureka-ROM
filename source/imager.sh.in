@@ -43,7 +43,7 @@ ROOTFS="$(begin_squashfs_edit 'rootfs')"
 
 # Set build revision
 pLog "Setting Build Revision"
-echo "$Revision" > "${ROOTFS}/chrome/pwnedcast_ver"
+echo "$Revision" > "${ROOTFS}/etc/chromecast-ota.rev"
 
 # Replace boot animation
 pLog "Replacing Boot Animation"
