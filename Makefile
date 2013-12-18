@@ -2,9 +2,10 @@ BASE_BUILD = 14651
 VERSION = 1
 REVISION = 003
 OTA_GIT_TAG = V1.2.2
+WHITELIST_URL = http://pwl.team-eureka.com/applist.php
 
 BUILD_DIR = build
-MOD_NAME = 20EurekaROM-$(BASE_BUILD)-V$(VERSION).zip
+MOD_NAME = 20EurekaROM-$(BASE_BUILD).$(REVISION)-V$(VERSION).zip
 INSTALL = install
 
 .PHONY: clean
@@ -50,7 +51,7 @@ $(BUILD_DIR)/bin: \
 
 $(BUILD_DIR)/misc: \
 	  source/boot-animation \
-	  source/apps.conf \
+	  download/apps.conf \
 	  source/httpd.conf \
 	  source/eureka.ini \
 	  source/20-dns.conf
@@ -70,6 +71,9 @@ download/ChromeCast-OTA/chromecast-ota: download/ChromeCast-OTA
 
 download/ChromeCast-OTA: | download
 	git clone -b $(OTA_GIT_TAG) https://github.com/team-eureka/ChromeCast-OTA.git $@
+
+download/apps.conf: | download
+	curl -Lo $@ $(WHITELIST_URL)
 
 download:
 	mkdir -p $@
