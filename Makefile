@@ -1,6 +1,6 @@
-BASE_BUILD = 14651
+BASE_BUILD = 14975
 VERSION = 1
-REVISION = 003
+REVISION = 001
 OTA_GIT_TAG = V1.2.2
 WHITELIST_URL = http://pwl.team-eureka.com/applist.php
 
@@ -65,7 +65,7 @@ download/ota/%: download/ota.zip | download
 	unzip -DD $< $(notdir $@) -d $(@D)
 
 download/ota.zip: | download
-	curl -Lo $@ http://cache.pack.google.com/edgedl/googletv-eureka/stable-channel/ota.14651.stable-channel.eureka-b3.dfc8a782689cf97acc8d147b3eac1ab281486a4b.zip
+	curl -Lo $@ http://cache.pack.google.com/edgedl/googletv-eureka/stable-channel/ota.14975.stable-channel.eureka-b3.dc1ceff0b99077b99b60b9c1e7d4aeff84f7932b.zip
 
 download/ChromeCast-OTA/chromecast-ota: download/ChromeCast-OTA
 
