@@ -1,7 +1,7 @@
 BASE_BUILD = 14975
 VERSION = 1
 REVISION = 001
-OTA_GIT_TAG = V1.2.2
+OTA_GIT_TAG = v1.2.2
 WHITELIST_URL = http://pwl.team-eureka.com/applist.php
 
 BUILD_DIR = build
