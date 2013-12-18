@@ -3,7 +3,7 @@
 # Vars
 # Do NOT change these, as they affect the update engine!
 Revision="@REVISION@"
-VersionName="EurekaROM-@BASE_BUILD@-V@VERSION@-R$Revision"
+VersionName="EurekaROM-@BASE_BUILD@.$Revision-V@VERSION@"
 
 # Prefixed log messages are easier to distinguish
 pLog() {
