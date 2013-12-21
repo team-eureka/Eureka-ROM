@@ -77,7 +77,6 @@ pLog "Enabling Team Eureka's Whitelisting Service"
 sed -i 's|https://clients3.google.com/cast/chromecast/device/baseconfig|http://localhost/whitelist\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00|g' "${ROOTFS}/chrome/eureka_shell"
 mkdir -p "${ROOTFS}/usr/share/eureka-apps/configs/"
 mv ./misc/apps.conf "${ROOTFS}/usr/share/eureka-apps/configs/"
-sed -i "s|--app-config-path=/app.conf|--app-config-path=/system/usr/share/eureka-apps/configs/apps.conf|g" "${ROOTFS}/usr/bin/content_shell.sh"
 
 # Upload binaries
 pLog "Adding BusyBox Tools, ADB, CURL, FTS-Utils and SSH Binaries"
