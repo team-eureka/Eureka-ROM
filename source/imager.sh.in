@@ -88,6 +88,7 @@ mv ./bin/{lighttpd-angel,lighttpd} "${ROOTFS}/usr/bin/"
 mv ./misc/httpd.conf "${ROOTFS}/etc/"
 mv ./bin/lib "${ROOTFS}/usr/"
 mkdir "${ROOTFS}/usr/share/www/"
+mv ./misc/www/* "${ROOTFS}/usr/share/www/"
 
 # Upload EurekaSettings
 pLog "Adding EurekaSettings"
