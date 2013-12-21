@@ -17,6 +17,15 @@ if busybox test $(EurekaSettings get Services ssh) = "1"; then
 	/system/bin/dropbear -d /usr/share/sshkeys/dropbear_dss_host_key -r /usr/share/sshkeys/dropbear_rsa_host_key -P /tmp/dropbear.pid &
 fi
 
+if ! busybox test -d "/data/eureka" ; then
+	echo "Creating /data/eureka folder " > /dev/ttyS0
+	mkdir /data/eureka
+	busybox chmod -R 777 /data/eureka
+else
+	echo "Fixing /data/eureka permissions " > /dev/ttyS0
+	busybox chmod -R 777 /data/eureka
+fi
+
 echo "Triggering lighttpd " > /dev/ttySO
 lighttpd -m /system/usr/lib -f /system/etc/httpd.conf &
 
