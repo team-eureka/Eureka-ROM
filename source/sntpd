@@ -35,8 +35,5 @@ busybox sh /system/usr/share/eureka-apps/ota/chromecast-ota > /tmp/chromecast-ot
 echo "Clearing FTS Crash Counter " > /dev/ttyS0
 sleep 45 && fts-set crashcounter.android 0 &
 
-echo "Launching idlescreen application " > /dev/ttyS0
-sleep 20 && curl -H "Content-Type: application/json" http://localhost:8008/apps/00000000-0000-0000-0000-000000000000 -X POST &
-
 echo "Running SNTPD " > /dev/ttyS0
 /bin/toolbox sntpd
