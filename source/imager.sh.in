@@ -78,6 +78,10 @@ sed -i 's|https://clients3.google.com/cast/chromecast/device/baseconfig|http://l
 mkdir -p "${ROOTFS}/usr/share/eureka-apps/configs/"
 mv ./misc/apps.conf "${ROOTFS}/usr/share/eureka-apps/configs/"
 
+# Disable googles idle screen restriction
+pLog "Disabling idlescreen URL restriction"
+sed -i 's|https://\*.google.com\;|\*\;\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00|g' "${ROOTFS}/chrome/eureka_shell"
+
 # Upload binaries
 pLog "Adding BusyBox Tools, ADB, CURL, FTS-Utils and SSH Binaries"
 mv ./bin/{busybox,adbd,curl,dropbear,fts-get,fts-set} "${ROOTFS}/bin/"
