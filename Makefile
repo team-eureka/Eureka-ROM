@@ -1,6 +1,6 @@
-BASE_BUILD = 14975
-VERSION = 1.1
-REVISION = 002
+BASE_BUILD = 15250
+VERSION = 1.0
+REVISION = 001
 OTA_GIT_TAG = v1.2.2
 WHITELIST_URL = http://pwl.team-eureka.com/applist.php
 
@@ -40,6 +40,7 @@ $(BUILD_DIR)/bin: \
 	  prebuilt/fts-set \
 	  prebuilt/lighttpd \
 	  prebuilt/lighttpd-angel \
+	  prebuilt/openssl \
 	  prebuilt/Whitelist-CGI \
 	  prebuilt/whitelist-sync \
 	  source/update_engine \
@@ -65,7 +66,7 @@ download/ota/%: download/ota.zip | download
 	unzip -DD $< $(notdir $@) -d $(@D)
 
 download/ota.zip: | download
-	curl -Lo $@ http://cache.pack.google.com/edgedl/googletv-eureka/stable-channel/ota.14975.stable-channel.eureka-b3.dc1ceff0b99077b99b60b9c1e7d4aeff84f7932b.zip
+	curl -Lo $@ http://cache.pack.google.com/edgedl/googletv-eureka/stable-channel/ota.15250.stable-channel.eureka-b3.c969d0c31d3154c9333cc4d6837ffd6696570173.zip
 
 download/ChromeCast-OTA/chromecast-ota: download/ChromeCast-OTA
 

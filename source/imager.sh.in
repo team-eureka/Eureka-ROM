@@ -74,7 +74,7 @@ mv ./misc/20-dns.conf "${ROOTFS}/etc/dhcpcd/dhcpcd-hooks/"
 
 # Enable use of local CGI whitelist program
 pLog "Enabling Team Eureka's Whitelisting Service"
-sed -i 's|https://clients3.google.com/cast/chromecast/device/baseconfig|http://localhost/whitelist\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00|g' "${ROOTFS}/chrome/eureka_shell"
+sed -i 's|https://clients3.google.com/cast/chromecast/device/baseconfig|http://localhost/google-why-are-you-being-so-evilzz-whitelist|g' "${ROOTFS}/chrome/eureka_shell"
 mkdir -p "${ROOTFS}/usr/share/eureka-apps/configs/"
 mv ./misc/apps.conf "${ROOTFS}/usr/share/eureka-apps/configs/"
 
@@ -82,9 +82,15 @@ mv ./misc/apps.conf "${ROOTFS}/usr/share/eureka-apps/configs/"
 pLog "Disabling idlescreen URL restriction"
 sed -i 's|https://\*.google.com\;|\*\;\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00|g' "${ROOTFS}/chrome/eureka_shell"
 
+# Add support for SSL binaries
+pLog "Enabling ssl shared libraries"
+echo "/usr/lib/libcrypto.so.1.0.0" >> "${ROOTFS}/etc/ld.so.preload"
+echo "/usr/lib/libssl.so.1.0.0" >> "${ROOTFS}/etc/ld.so.preload"
+echo "/usr/lib/libcurl.so.4.3.0" >> "${ROOTFS}/etc/ld.so.preload"
+
 # Upload binaries
 pLog "Adding BusyBox Tools, ADB, CURL, FTS-Utils and SSH Binaries"
-mv ./bin/{busybox,adbd,curl,dropbear,fts-get,fts-set} "${ROOTFS}/bin/"
+mv ./bin/{busybox,adbd,curl,dropbear,fts-get,fts-set,openssl} "${ROOTFS}/bin/"
 
 # Upload httpd binaries
 pLog "Adding lighttpd, required modules, and creating root www folder"
