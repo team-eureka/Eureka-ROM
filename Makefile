@@ -1,5 +1,5 @@
 BASE_BUILD = 15250
-VERSION = 1.0
+VERSION = 2.0
 REVISION = 001
 OTA_GIT_TAG = v1.2.2
 WHITELIST_URL = http://pwl.team-eureka.com/applist.php
