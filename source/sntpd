@@ -13,8 +13,16 @@ if busybox test $(EurekaSettings get Services adb) = "1"; then
 fi
 
 if busybox test $(EurekaSettings get Services ssh) = "1"; then
-	echo "Triggering SSH " > /dev/ttyS0
-	/system/bin/dropbear -d /usr/share/sshkeys/dropbear_dss_host_key -r /usr/share/sshkeys/dropbear_rsa_host_key -P /tmp/dropbear.pid &
+    if busybox test -f /data/flashcast/dropbear/dropbear_dss_host_key && busybox test -f /data/flashcast/dropbear/dropbear_rsa_host_key; then
+	    echo "Triggering SSH " > /dev/ttyS0
+	    /system/bin/dropbear -d /data/flashcast/dropbear/dropbear_dss_host_key -r /data/flashcast/dropbear/dropbear_rsa_host_key -P /tmp/dropbear.pid &
+    else
+        echo "SSH Keys Missing, Generating " > /dev/ttyS0
+        /usr/bin/dropbearkey -t rsa -f "/data/flashcast/dropbear/dropbear_rsa_host_key" > /dev/null 2>&1
+        /usr/bin/dropbearkey -t dss -f "/data/flashcast/dropbear/dropbear_dss_host_key" > /dev/null 2>&1
+	    echo "Triggering SSH " > /dev/ttyS0
+	    /system/bin/dropbear -d /data/flashcast/dropbear/dropbear_dss_host_key -r /data/flashcast/dropbear/dropbear_rsa_host_key -P /tmp/dropbear.pid &
+    fi
 fi
 
 if ! busybox test -d "/data/eureka" ; then

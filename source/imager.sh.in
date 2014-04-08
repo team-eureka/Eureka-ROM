@@ -3,11 +3,20 @@
 # Vars
 # Do NOT change these, as they affect the update engine!
 Revision="@REVISION@"
-VersionName="EurekaROM-@BASE_BUILD@.$Revision-V@VERSION@"
+VersionName="EurekaROM-@BASE_BUILD@.$Revision"
 
 # Prefixed log messages are easier to distinguish
 pLog() {
 	log "$VersionName: $1"
+}
+
+# Set bootmode if we are running from recovery
+BootModeSet() {
+    if test -b "/dev/sda" ; then
+        pLog "Running from USB, skipping set-boot-cmd"    
+    else
+        set-boot-cmd $1
+    fi
 }
 
 # We now debug every step of the process so it's easier to debug problems
@@ -19,6 +28,10 @@ if ! test -f "/etc/flasher-version" ; then
 elif ! is_at_least_version "1.1.1" ; then
 	fatal "$VersionName: Installation Cancelled, Please Update to Flashcast Version 1.1.1 or Later."
 fi
+
+# Set boot mode to recovery, just in case!
+pLog "Setting Bootmode to Recovery... (Just in case we break something)"
+BootModeSet recovery
 
 # First we flash the kernel
 pLog "Flashing Kernel..."
@@ -90,7 +103,7 @@ echo "/usr/lib/libcurl.so.4.3.0" >> "${ROOTFS}/etc/ld.so.preload"
 
 # Upload binaries
 pLog "Adding BusyBox Tools, ADB, CURL, FTS-Utils and SSH Binaries"
-mv ./bin/{busybox,adbd,curl,dropbear,fts-get,fts-set,openssl} "${ROOTFS}/bin/"
+mv ./bin/{busybox,adbd,curl,dropbear,dropbearkey,fts-get,fts-set,openssl} "${ROOTFS}/bin/"
 
 # Upload httpd binaries
 pLog "Adding lighttpd, required modules, and creating root www folder"
@@ -118,22 +131,13 @@ pLog "Enabling Services at Startup"
 rm "${ROOTFS}/bin/sntpd"
 mv ./bin/sntpd "${ROOTFS}/bin/sntpd"
 
-# Mounting /data
-pLog "Mounting UserData Partition"
-DATA="$(mount_mtd_partition userdata)"
-
-# Make folder for the keys, and copy them over
-pLog "Copying Unique SSH Keys to System"
-mkdir -p "${ROOTFS}/usr/share/sshkeys"
-cp "${DATA}/flashcast/dropbear/"/* "${ROOTFS}/usr/share/sshkeys/"
-
-# Unmount userdata
-pLog "Unmounting UserData"
-cleanup_mount "$DATA"
-
 # Clean up and write the modified partition back
 pLog "Done editing System, Writing Changes..."
 end_squashfs_edit "$ROOTFS"
+
+# Set boot mode to recovery, just in case!
+pLog "Setting Bootmode back to normal now that we are done flashing"
+BootModeSet normal
 
 # One final goodbye
 pLog "Script Finished!"

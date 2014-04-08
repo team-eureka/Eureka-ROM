@@ -1,11 +1,10 @@
-BASE_BUILD = 15250
-VERSION = 2.0
+BASE_BUILD = 16041
 REVISION = 001
 OTA_GIT_TAG = v1.2.2
 WHITELIST_URL = http://pwl.team-eureka.com/applist.php
 
 BUILD_DIR = build
-MOD_NAME = 20EurekaROM-$(BASE_BUILD).$(REVISION)-V$(VERSION).zip
+MOD_NAME = 20EurekaROM-$(BASE_BUILD).$(REVISION).zip
 INSTALL = install
 
 .PHONY: clean
@@ -36,6 +35,7 @@ $(BUILD_DIR)/bin: \
 	  prebuilt/busybox \
 	  prebuilt/curl \
 	  prebuilt/dropbear \
+	  prebuilt/dropbearkey \
 	  prebuilt/fts-get \
 	  prebuilt/fts-set \
 	  prebuilt/lighttpd \
@@ -66,7 +66,7 @@ download/ota/%: download/ota.zip | download
 	unzip -DD $< $(notdir $@) -d $(@D)
 
 download/ota.zip: | download
-	curl -Lo $@ http://cache.pack.google.com/edgedl/googletv-eureka/stable-channel/ota.15250.stable-channel.eureka-b3.c969d0c31d3154c9333cc4d6837ffd6696570173.zip
+	curl -Lo $@ http://dl.google.com/googletv-eureka/stable-channel/ota.16041.stable-channel.eureka-b3.4b2d484f74cc12a8ed827db43f7d76bd3a983d4a.zip
 
 download/ChromeCast-OTA/chromecast-ota: download/ChromeCast-OTA
 
@@ -99,7 +99,6 @@ prebuilt/whitelist-sync:
 	$(error Please place a copy of whitelist-sync at $@)	
 	
 IN_DEFINES = -e 's/@BASE_BUILD@/$(BASE_BUILD)/g' \
-	     -e 's/@VERSION@/$(VERSION)/g' \
 	     -e 's/@REVISION@/$(REVISION)/g'
 %.sh: %.sh.in
 	sed $(IN_DEFINES) $< >$@
