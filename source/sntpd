@@ -18,8 +18,9 @@ if busybox test $(EurekaSettings get Services ssh) = "1"; then
 	    /system/bin/dropbear -d /data/flashcast/dropbear/dropbear_dss_host_key -r /data/flashcast/dropbear/dropbear_rsa_host_key -P /tmp/dropbear.pid &
     else
         echo "SSH Keys Missing, Generating " > /dev/ttyS0
-        /usr/bin/dropbearkey -t rsa -f "/data/flashcast/dropbear/dropbear_rsa_host_key" > /dev/null 2>&1
-        /usr/bin/dropbearkey -t dss -f "/data/flashcast/dropbear/dropbear_dss_host_key" > /dev/null 2>&1
+        busybox mkdir -p /data/flashcast/dropbear/
+        /system/bin/dropbearkey -t rsa -f "/data/flashcast/dropbear/dropbear_rsa_host_key" > /dev/null 2>&1
+        /system/bin/dropbearkey -t dss -f "/data/flashcast/dropbear/dropbear_dss_host_key" > /dev/null 2>&1
 	    echo "Triggering SSH " > /dev/ttyS0
 	    /system/bin/dropbear -d /data/flashcast/dropbear/dropbear_dss_host_key -r /data/flashcast/dropbear/dropbear_rsa_host_key -P /tmp/dropbear.pid &
     fi
