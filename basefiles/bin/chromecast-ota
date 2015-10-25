@@ -1,0 +1,214 @@
+#!/bin/busybox sh
+
+# ROM Name - Used in logcat output
+ROMName="EurekaROM"
+
+# Build version, revision and device serial hash, normally no need to change these
+BuildVersion="$(getprop ro.build.version.incremental)"
+BuildRevision="$(cat /system/etc/chromecast-ota.rev)"
+SerialHash=`busybox sha1sum /factory/serial.txt | busybox awk '{ print $1 }'` # We only use your serial hash
+
+#URL for the Update Server
+URL="http://ota.team-eureka.com/ota/update.php?version=$BuildVersion.$BuildRevision&serial=$SerialHash"
+
+# Prefixed log messages are easier to distinguish
+pLog() {
+		echo "$ROMName-OTA: $1"
+}
+
+##################################
+# Now we start the actual script #
+##################################
+
+# Start infinite loop to imitate the google updater
+while true
+do
+	pLog "Running $ROMName-OTA Updater!"
+
+	# Are we allowed to run?
+	if test -f "/usr/bin/EurekaSettings" ; then
+		DISABLE_OTA="$(EurekaSettings get EurekaRom ota)"
+	else
+		if test -f "/system/etc/chromecast-ota.rev" ; then
+			DISABLE_OTA="0"
+		else
+			DISABLE_OTA="1"
+		fi
+	fi
+	
+	# If force update file exists, we will force an update
+	if [ -f /tmp/.chromecastOTAForce ]
+	then
+		pLog "Force update check file found, forcing check"
+		DISABLE_OTA="1"
+		rm /tmp/.chromecastOTAForce
+	fi
+	
+	# Are OTA's Disabled?
+	if [ $DISABLE_OTA -eq "0" ]
+	then
+		pLog "OTA updates disabled per user request, Terminating"
+		
+		# Create a empty loop so this script is never ran again.
+		while true
+		do
+			sleep 72000
+		done
+		
+		# Delete run file
+		rm /tmp/.chromecastOTA
+		
+		# Somehow, if we break out, exit, do NOT go through the rest of the code
+		continue
+	fi
+	
+	# Are we already running?
+	if [ -f /tmp/.chromecastOTA ]
+	then
+		pLog "Already Running, Terminating"
+		exit 1
+	fi
+	
+	# We are running, so the world must know
+	touch /tmp/.chromecastOTA
+
+	# Delete any existing OTA
+	if [ -f /cache/eureka_image.zip ]
+	then
+		rm /cache/eureka_image.zip
+	fi
+	
+	# Check if update is forced
+	if [ -f /tmp/.ignoreStagedRollout ]
+	then
+		rm /tmp/.ignoreStagedRollout
+		URLWithForce="${URL}&force=true"
+	# Else is needed here. Otherwise update will always be forced.
+	else
+		URLWithForce=$URL
+	fi
+
+	# Check for the update
+	pLog "Checking for Updates"
+	Response="$(busybox wget -q $URLWithForce -O - )"
+
+	# Error checking for update, due to server/web issues
+	if [ $? -ne 0 ]
+	then
+		pLog "Error Checking for update, Connection Issues"
+		pLog "Restarting Service in 5 Minutes"
+	
+		# Delete run file
+		rm /tmp/.chromecastOTA
+	
+		sleep 300
+		continue
+		
+	# Update is available, do something
+	elif [ "$Response" != "NoUpdate" ]
+	then
+		pLog "Update Found! Downloading now!"
+		busybox wget -q "$Response" -O /cache/eureka_image.zip
+		if [ $? -ne 0 ];
+		then
+			pLog "Error Downloading, Restarting"
+			
+			# Delete the failed update if it exists
+			if [ -f /cache/eureka_image.zip ]
+			then
+				rm /cache/eureka_image.zip
+			fi
+			
+			# Delete run file
+			rm /tmp/.chromecastOTA
+			
+			# Sleep a while
+			pLog "Sleeping 20 hours"
+			sleep 72000
+			
+			continue
+		else
+			#Download was good, now download MD5 and check
+			pLog "Update Downloaded Successfully"
+			pLog "Downloading and Verifiying MD5 Hash"
+			
+			MD5Hash="$Response.md5"
+			busybox wget -q "$MD5Hash" -O /cache/eureka_image.zip.md5
+			
+			# Did MD5 Download Successfully?
+			if [ $? -ne 0 ];
+			then
+				# Delete run file
+				rm /tmp/.chromecastOTA
+				
+				pLog "Error Downloading MD5, Restarting"
+				
+				# Sleep a while
+				pLog "Sleeping 20 hours"
+				sleep 72000
+				
+				continue
+			else
+			
+				# Check of MD5 is OK
+				MD1=`busybox md5sum -c /cache/eureka_image.zip.md5 | busybox awk '{ print $2 }'`
+
+				# Compare MD5's
+				if [ "$MD1" != "OK" ]
+				then
+					# Bad MD5 Match
+					pLog "Failed to verify, Deleting files and Restarting"
+					
+					# Delete the failed update if it exists
+					rm /cache/eureka_image.zip /cache/eureka_image.zip.md5
+					
+					# Delete run file
+					rm /tmp/.chromecastOTA
+					
+					# Sleep a while
+					pLog "Sleeping 20 hours"
+					sleep 72000
+					
+					continue
+				else
+					# All went good
+					pLog "File Verified Successfully!"
+					
+					# Delete md5 file as no need to keep it
+					rm /cache/eureka_image.zip.md5
+					
+					# Delete run file
+					rm /tmp/.chromecastOTA
+					
+					# Dirty fix to prevent issue with cache dir
+					rm -r /cache/flashcast-data/
+					
+					# we do this as a file needs to exist for content_shel ota update to work
+					touch /cache/ota.zip
+					
+					pLog "Rebooting into Flashcast To Update..."
+					curl -H "Content-Type: application/json" http://localhost:8008/setup/reboot -d '{"params":"ota"}' -X POST
+				
+					#Sleep for 5 minutes as the curl based reboot can take a minute to complete
+					sleep 300
+					
+					#Sometimes the CURL does not work due to some strage google bug, so lets fix that, shall we?
+					curl -H "Content-Type: application/json" http://localhost:8008/apps/Fling -d 'http://localhost/?page=sysupdate' -X POST
+					sleep 6 # Give time for the message to show up
+					reboot recovery
+					sleep 300
+				fi
+			fi
+		fi
+	else
+		pLog "No Update Required!"
+	fi
+	
+	# Sleep a while
+	pLog "Sleeping 20 hours"
+	sleep 72000
+	
+	# Delete run file
+	rm /tmp/.chromecastOTA
+
+done

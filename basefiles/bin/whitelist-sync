@@ -1,0 +1,48 @@
+#!/bin/busybox
+
+# Name of application, shows up in logcat
+LogName="Whitelist-Sync"
+
+# Build version, revision and device serial hash, normally no need to change these
+BuildRev="$(grep -e '^ro.build.version.incremental=' /build.prop | busybox cut -d '=' -f 2 | busybox tr '\n' '.' && cat /system/etc/chromecast-ota.rev)"
+SerialHash=`busybox sha1sum /factory/serial.txt | busybox awk '{ print $1 }'` # We only use your serial hash
+
+#URL for the Update Server (will get overwritten by EurekaSettings if defined)
+URL="http://pwl.team-eureka.com/applist.php?version=$BuildRev&serial=$SerialHash"
+
+# Prefixed log messages are easier to distinguish
+pLog() {
+        echo "$LogName: $1"
+}
+
+#######################################
+# Begin "apps.conf" Update Proceedure #
+#######################################
+
+	pLog "Running $LogName"
+	
+	# Are we a part of the EurekaROM? If so, get info from the EurekaSettings app
+	if [ -f /usr/bin/EurekaSettings ]
+	then
+		# Define update URL based on custom settings, if defined
+		if [ "$(EurekaSettings get WhiteList useSelection)" == "3" ]
+		then
+			URL="$(EurekaSettings get WhiteList customURL)"
+		fi		
+	fi
+	
+	# Before we run for a update check, make sure our folder exists
+	if [ ! -d /data/eureka ]
+	then
+		mkdir /data/eureka && chmod -R 777 /data/eureka
+	fi
+
+	# Check for the update if we are set to not use local
+	if [ "$(EurekaSettings get WhiteList useSelection)" == "2" ]
+	then
+		pLog "Use local enabled, sync disabled."
+	else
+		pLog "Syncing with Whitelist Server"
+		busybox wget -q "$URL" -O /data/eureka/apps.conf
+		pLog "Updated AppList Downloaded Successfully"	
+	fi
