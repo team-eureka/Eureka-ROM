@@ -1,4 +1,10 @@
-Eureka-ROM
+Eureka-ROM is EOL'ed
+=============
+
+Team Eureka has moved to [ROM] Flashcast-AutoRoot, with ssh, adb, and OTA w/ root support but no webpage, will keep you up to date with Chrome OTA and root
+
+http://forum.xda-developers.com/android-tv/chromecast/rom-flashcast-autoroot-t3270332
+
 =============
 
 This is the source scripts used to build Eureka-ROM
